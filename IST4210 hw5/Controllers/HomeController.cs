@@ -1,6 +1,7 @@
 using IST4210_hw5.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using System.Diagnostics;
 
 namespace IST4210_hw5.Controllers
@@ -8,115 +9,99 @@ namespace IST4210_hw5.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly DatabaseHelper _databaseHelper;
 
-        public HomeController(ILogger<HomeController> logger, DatabaseHelper databaseHelper)
+        public HomeController(ILogger<HomeController> logger)
         {
-            _logger = logger;
-            _databaseHelper = databaseHelper;
             ViewBag.IsLoggedIn = false;
+            _logger = logger;
         }
 
-        // Login Page
-        public IActionResult Index(string errorMessage = "")
+        public IActionResult Index(string? errorMessage = "")
         {
             ViewBag.IsLoggedIn = false;
-            var loginModel = new logIn { AuthenticationError = errorMessage };
+            var loginModel = new Models.Login() { AuthenticationError = errorMessage };
             return View(loginModel);
         }
-
         [HttpPost]
         [AllowAnonymous]
-        public JsonResult NewUser(string firstName, string lastName, string email, string password, string gender,
-            int height, string dept, string major)
+        public JsonResult NewUser(string firstName, string lastName, string email, string password,
+                                  string gender, string height, string dept, string major)
         {
-           // var hashedPassword = PasswordOneWayHash.GetHash(password);
-            _databaseHelper.InsertStudent(firstName, lastName, email, password, gender, height, dept, major );
-            return Json(new { Message = $"User {firstName} created successfully!" });
+            var hashedPassword = PasswordOneWayHash.GetHash(password);
+            DatabaseHelper.InsertNew(firstName, lastName, email, hashedPassword, gender, int.Parse(height), dept, major);
+            return Json(new { Message = $"User {firstName} created sucessfully!" });
         }
-
-        // Enrollment Page (GET)
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult Enrollment()
         {
             ViewBag.IsLoggedIn = true;
-            var students = _databaseHelper.GetStudents();
-            var studentsWithEnrollmentInfo = UpdateEnrollmentStatus(students);
-            return View(studentsWithEnrollmentInfo);
+            var students = DatabaseHelper.GetStudents();
+            List<Student> studentWithEnrollmentInfo = UpdateEnrollment(students);
+            return View(studentWithEnrollmentInfo);
         }
 
-        // Enrollment Page (POST)
-        [HttpPost]
-        [AllowAnonymous]
-        public IActionResult Enrollment(Student pageModel)
+        private static List<Student> UpdateEnrollment(IEnumerable<Student> students)
         {
-            _databaseHelper.InsertEnrollment(pageModel.StudentId, "Fall", "2024");
-            ViewBag.IsLoggedIn = true;
-
-            var students = _databaseHelper.GetStudents();
-            var studentsWithEnrollmentInfo = UpdateEnrollmentStatus(students);
-
-            return View(studentsWithEnrollmentInfo);
-        }
-
-        private List<Student> UpdateEnrollmentStatus(IEnumerable<Student> students)
-        {
-            var studentsWithEnrollmentInfo = new List<Student>();
+            var studentWithEnrollmentInfo = new List<Student>();
             foreach (var student in students)
             {
-                student.EnrollmentStatus = _databaseHelper.CheckEnrollment(student.StudentId) ? "Enrolled" : "Not Enrolled";
-                studentsWithEnrollmentInfo.Add(student);
+                student.EnrollmentStatus = DatabaseHelper.CheckStudent(student.StudentId) ? "Enrolled" : "Not Enrolled";
+                studentWithEnrollmentInfo.Add(student);
             }
-            return studentsWithEnrollmentInfo;
+
+            return studentWithEnrollmentInfo;
         }
 
-        // Student Home Page
-        public IActionResult StudentHome(logIn model)
+        [HttpPost]
+        public IActionResult Enrollment(Student pageModel)
+        {
+            DatabaseHelper.InsertEnrollment(pageModel.StudentId, "Fall", "2024");
+            ViewBag.IsLoggedIn = true;
+            var students = DatabaseHelper.GetStudents();
+            var studentsWithEnrollment = UpdateEnrollment(students);
+            return View(studentsWithEnrollment);
+        }
+        public IActionResult StudentHome(Models.Login model)
         {
             if (model == null)
             {
-                return RedirectToAction(nameof(Index));
+                return Index();
             }
-
-            var loggedInStudent = _databaseHelper.GetStudent(model.Username.ToLower());
+            var loggedInStudent = DatabaseHelper.GetStudent(model.UserName.ToLower());
             if (loggedInStudent == null)
             {
-                return RedirectToAction(nameof(Index), new { errorMessage = "Invalid username!" });
+                return RedirectToAction("Index", new { errorMessage = "Invalid UserName" });
             }
-
-            bool isPasswordCorrect = loggedInStudent.Password == model.Password;
-            if (!isPasswordCorrect)
+            bool isCorrectPassword = loggedInStudent.Password == model.Password;
+            if (!isCorrectPassword)
             {
-                return RedirectToAction(nameof(Index), new { errorMessage = "Invalid password!" });
+                return RedirectToAction("Index", new { errorMessage = "Invalid Password" });
+
             }
-
-            ViewBag.IsLoggedIn = true;
-            ViewBag.StudentName = $"{loggedInStudent.FirstName} {loggedInStudent.LastName}";
-            return View(loggedInStudent); // Pass logged-in student to the view for personalized content
-        }
-
-        // Apply Page (GET)
-        public IActionResult Apply()
-        {
             ViewBag.IsLoggedIn = true;
             return View();
         }
-
-        // Apply Page (POST)
-        [HttpPost]
-        public IActionResult Apply(string firstName, string lastName, string email, string address1, string address2,
-            string city, string state, string phone, string resumePath)
+        public IActionResult Apply()
         {
-            var resumeContent = System.IO.File.ReadAllLines(resumePath);
-            ViewData["Resume"] = resumeContent;
             ViewBag.IsLoggedIn = true;
 
-            // Optionally save application data to the database
-            return Json(new { Message = "Application submitted successfully!" });
+            return View();
         }
+        [HttpPost]
+        public IActionResult Apply(string firstName, string lastName, string email,
+            string address1, string address2, string city, string state, string phone, string resume)
+        {
+            using var resumeFile = System.IO.File.OpenRead(resume);
+            byte[] holder = new byte[resume.Length];
+            resumeFile.Read(holder, 0, holder.Length);
 
-        // Error Page
+            string[] resumeContent = System.IO.File.ReadAllLines(resume);
+            ViewData["Resume"] = resumeContent;
+
+            ViewBag.IsLoggedIn = true;
+
+            return Json(new { name = resumeContent[0] });
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

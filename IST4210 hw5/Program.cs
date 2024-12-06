@@ -6,7 +6,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 // Register DatabaseHelper for dependency injection
-builder.Services.AddScoped<DatabaseHelper>();
 
 var app = builder.Build();
 

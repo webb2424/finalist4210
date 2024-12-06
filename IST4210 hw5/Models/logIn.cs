@@ -1,11 +1,13 @@
 ﻿namespace IST4210_hw5.Models
 {
-    public class logIn
+    public class Login
     {
-        private string _password = String.Empty;
-        public string Username { get; set; } = string.Empty;
-        public string Password { internal get { return _password; } set { _password = PasswordOneWayHash.GetHash(value);  } } 
-        public string AuthenticationError { get; set; } = string.Empty;
+        
+            private string _password = string.Empty;
+            public string UserName { get; set; } = string.Empty;
+            public string Password { get { return _password; } set { _password = PasswordOneWayHash.GetHash(value); } }
+            public string AuthenticationError { get; set; } = string.Empty;
+        
 
     }
 }

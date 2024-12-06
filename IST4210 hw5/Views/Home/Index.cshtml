@@ -1,88 +1,82 @@
-﻿@model IST4210_hw5.Models.logIn
+﻿@model Login
 @{
-    ViewData["Title"] = "Shapes - Log In";
+    ViewData["Title"] = "LogIn Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome to Shapes Fitness Group!</h1>
-    <h3>Your gateway to a healthier and more active life.</h3>
+    <h1 class="display-4">Welcome to our Student Registration System</h1>
 </div>
-
 <br />
 <br />
 <br />
 
-<div style="text-align: center; border-style: ridge; padding: 20px; border-radius: 10px;">
-    <h2>Log In to Access Your Fitness Plan</h2>
+<div style="text-align: center; border-style: ridge">
     <br />
-    @using (Html.BeginForm("UserHome", "Home", FormMethod.Post))
+    <br />
+    @using (Html.BeginForm("StudentHome", "Home", FormMethod.Post))
     {
-        <div>
-            <label class="form-label">Username</label><br />
-            @Html.TextBoxFor(m => m.Username, new { @class = "form-control", style = "width: 300px; margin: 0 auto;" })
+        <label>UserName:</label>
+        @Html.TextBoxFor(m => m.UserName)
+        <br />
+        <div class="p-style">
+            <label>Password:</label>
+            @Html.PasswordFor(m => m.Password)
+
         </div>
         <br />
-        <div>
-            <label class="form-label">Password</label><br />
-            @Html.PasswordFor(m => m.Password, new { @class = "form-control", style = "width: 300px; margin: 0 auto;" })
-        </div>
         <br />
-        <input type="submit" value="Log In" class="btn btn-primary" style="width: 150px;" />
+        <input type="submit" value="Log In" />
     }
-    <span style="color: red; display: block; margin-top: 10px;">@Model.AuthenticationError</span>
+    <span style="color: red">@Model.AuthenticationError</span> <br />
+    <a id="modal-launcher" href="#">New User </a> <span class="s-style">|</span> <a href="#">Forgot Password? </a>
     <br />
-    <a id="modal-launcher" href="#">New User</a>
-    <span class="s-style">|</span>
-    <a href="#">Forgot Password?</a>
 </div>
 
-<div id="modal-background" style="display:none;"></div>
-<div id="modal-content" style="display:none; border-style: ridge; padding: 20px; border-radius: 10px; width: 500px; margin: 0 auto;">
-    <div id="new_user_form">
-        <h3 style="color: gold; text-align: center;">New User Registration Form</h3>
-        <table style="width: 100%;">
+
+<div id="modal-background"></div>
+<div id="modal-content">
+    <div id="new-user-form">
+        <h3 style="color: brown;">New User Registration Form</h3>
+        <table>
             <tr>
-                <td class="s-label"><span>First Name:</span></td>
-                <td><input id="firstName" type="text" class="form-control" /></td>
+                <td class="s-label"><span>FirstName:</span></td>
+                <td><input id="firstName" type="text" /></td>
             </tr>
             <tr>
-                <td class="s-label"><span>Last Name:</span></td>
-                <td><input id="lastName" type="text" class="form-control" /></td>
+                <td class="s-label"><span>LastName:</span></td>
+                <td><input id="lastName" type="text" /></td>
             </tr>
             <tr>
                 <td class="s-label"><span>Email:</span></td>
-                <td><input id="email" type="text" class="form-control" /></td>
+                <td><input id="email" type="text" /></td>
             </tr>
             <tr>
                 <td class="s-label"><span>Password:</span></td>
-                <td><input id="password" type="password" class="form-control" /></td>
+                <td><input id="password" type="password" /></td>
             </tr>
             <tr>
                 <td class="s-label"><span>Gender:</span></td>
-                <td>
-                    <select id="gender" class="form-control">
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </td>
+                <td><input id="gender" type="text" /></td>
             </tr>
             <tr>
                 <td class="s-label"><span>Height:</span></td>
-                <td><input id="height" type="text" class="form-control" placeholder="e.g., 5'8\" "  /></td>
+                <td><input id="height" type="text" /></td>
             </tr>
             <tr>
                 <td class="s-label"><span>Department:</span></td>
-                <td><input id="dept" type="text" class="form-control" /></td>
+                <td><input id="dept" type="text" /></td>
             </tr>
             <tr>
                 <td class="s-label"><span>Major:</span></td>
-                <td><input id="major" type="text" class="form-control" /></td>
+                <td><input id="major" type="text" /></td>
             </tr>
         </table>
     </div>
-    <div style="padding-top: 10px; text-align: center;">
-        <button id="modal-user-create" class="btn btn-success">Create</button>
-        <button id="modal-close" class="btn btn-secondary">Close [X]</button>
+    <div style="padding-top: 20px;text-align: right; padding-right: 20px">
+        <button id="modal-user-create">Create</button>
+        <button id="modal-close">Close [X]</button>
+
     </div>
 </div>
+
+              

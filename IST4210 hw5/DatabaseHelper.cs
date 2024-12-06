@@ -5,136 +5,132 @@ using System.Data.SqlClient;
 
 namespace IST4210_hw5
 {
-    public class DatabaseHelper
+    public static class DatabaseHelper
     {
-        private readonly string _connectionString;
+        const string connectionString = "Data Source=DESKTOP-BEFCII3\\SQLEXPRESS; Initial Catalog=IST4310; Integrated Security=true; MultipleActiveResultSets=true";
 
-        public DatabaseHelper(IConfiguration configuration)
+        static readonly SqlConnection _sqlConnection = new SqlConnection(connectionString);
+
+        public static Student GetStudent(string email)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
-        }
-
-        public Student GetStudent(string email)
-        {
-            Student student = null;
-
-            const string query = "SELECT * FROM DBO.STUDENT WHERE Email = @Email";
-
-            using (var connection = new SqlConnection(_connectionString))
-            using (var command = new SqlCommand(query, connection))
+            var student = new Student();
+            const string getStudentQuery = "SELECT * FROM dbo.Student";
+            //create sql command adn add parameters
+            var command = new SqlCommand(getStudentQuery, _sqlConnection);
+            command.Parameters.AddWithValue("@email", email);
+            if (_sqlConnection.State != ConnectionState.Open)
             {
-                command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = email;
 
-                connection.Open();
-                using (var reader = command.ExecuteReader())
-                {
-                    if (reader.Read())
-                    {
-                        student = new Student
-                        {
-                            StudentId = reader.GetInt32(0),
-                            FirstName = reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
-                            LastName = reader.IsDBNull(2) ? string.Empty : reader.GetString(2),
-                            Gender = reader.IsDBNull(3) ? string.Empty : reader.GetString(3),
-                            Department = reader.IsDBNull(4) ? string.Empty : reader.GetString(4),
-                            Height = reader.IsDBNull(5) ? 0 : reader.GetInt32(5), // Changed to int
-                            Major = reader.IsDBNull(6) ? string.Empty : reader.GetString(6),
-                            Email = reader.IsDBNull(7) ? string.Empty : reader.GetString(7),
-                            Password = reader.IsDBNull(8) ? string.Empty : reader.GetString(8)
-                        };
-                    }
-                }
+                _sqlConnection.Open();
             }
+            bool dataRead = false;
+            var reader = command.ExecuteReader();
+            while (reader.Read() && dataRead == false)
+            {
+                student = (new Student
+                {
+                    StudentId = (int)reader[0],
+                    FirstName = reader[1] == null ? string.Empty : reader[1].ToString(),
+                    LastName = reader[2] == null ? string.Empty : reader[2].ToString(),
+                    Gender = reader[3] == null ? string.Empty : reader[3].ToString(),
+                    Department = reader[4] == null ? string.Empty : reader[4].ToString(),
+                    Height = (int)reader[5],
+                    Major = reader[6] == null ? string.Empty : reader[6].ToString(),
+                    Email = reader[7] == null ? string.Empty : reader[7].ToString(),
+                    Password = reader[8] == null ? string.Empty : reader[8].ToString(),
+                });
+                dataRead = true;
 
+            }
             return student;
         }
-
-        public IEnumerable<Student> GetStudents()
+        public static IEnumerable<Student> GetStudents()
         {
-            const string query = "SELECT * FROM DBO.STUDENT";
-
-            using (var connection = new SqlConnection(_connectionString))
-            using (var command = new SqlCommand(query, connection))
+            const string studentsQuery = "SELECT * FROM dbo.Student";
+            var command = new SqlCommand(studentsQuery, _sqlConnection);
+            if (_sqlConnection.State != ConnectionState.Open)
             {
-                connection.Open();
-                using (var reader = command.ExecuteReader())
+
+                _sqlConnection.Open();
+            }
+
+            var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                yield return (new Student
                 {
-                    while (reader.Read())
-                    {
-                        yield return new Student
-                        {
-                            StudentId = reader.GetInt32(0),
-                            FirstName = reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
-                            LastName = reader.IsDBNull(2) ? string.Empty : reader.GetString(2),
-                            Gender = reader.IsDBNull(3) ? string.Empty : reader.GetString(3),
-                            Department = reader.IsDBNull(4) ? string.Empty : reader.GetString(4),
-                            Height = reader.IsDBNull(5) ? 0 : reader.GetInt32(5), // Changed to int
-                            Major = reader.IsDBNull(6) ? string.Empty : reader.GetString(6),
-                            Email = reader.IsDBNull(7) ? string.Empty : reader.GetString(7),
-                            Password = reader.IsDBNull(8) ? string.Empty : reader.GetString(8)
-                        };
-                    }
-                }
+                    StudentId = (int)reader[0],
+                    FirstName = reader[1] == null ? string.Empty : reader[1].ToString(),
+                    LastName = reader[2] == null ? string.Empty : reader[2].ToString(),
+                    Gender = reader[3] == null ? string.Empty : reader[3].ToString(),
+                    Department = reader[4] == null ? string.Empty : reader[4].ToString(),
+                    Height = (int)reader[5],
+                    Major = reader[6] == null ? string.Empty : reader[6].ToString(),
+                    Email = reader[7] == null ? string.Empty : reader[7].ToString(),
+                    Password = reader[8] == null ? string.Empty : reader[8].ToString(),
+                });
+
+
             }
         }
-
-        public void InsertStudent(string firstName, string lastName, string email, string password, string gender, int height, string department, string major)
+        public static void InsertNew(string firstName, string lastName, string email, string password,
+                                  string gender, int height, string dept, string major)
         {
-            const string query = @"
-                INSERT INTO DBO.STUDENT
-                ([FirstName], [LastName], [Gender], [Department], [Height], [Major], [Email], [Password])
-                VALUES (@FirstName, @LastName, @Gender, @Department, @Height, @Major, @Email, @Password)";
-
-            using (var connection = new SqlConnection(_connectionString))
-            using (var command = new SqlCommand(query, connection))
+            const string studentsInsertQuery = "INSERT INTO [dbo].[Student] ([FirstName],[LastName],[Gender],[Department],[Height],[Major],[Email],[Password]) " +
+                "VALUES (@FirstName, @LastName, @Gender, @Department, @Height, @Major, @Email, @Password)";
+            var command = new SqlCommand(studentsInsertQuery, _sqlConnection);
+            command.Parameters.AddWithValue("@FirstName", firstName);
+            command.Parameters.AddWithValue("@LastName", lastName);
+            command.Parameters.AddWithValue("@Gender", gender);
+            command.Parameters.AddWithValue("@Department", dept);
+            command.Parameters.AddWithValue("@Height", height);
+            command.Parameters.AddWithValue("@Major", major);
+            command.Parameters.AddWithValue("@Email", email);
+            command.Parameters.AddWithValue("@Password", password);
+            if (_sqlConnection.State != ConnectionState.Open)
             {
-                command.Parameters.Add("@FirstName", SqlDbType.NVarChar).Value = firstName;
-                command.Parameters.Add("@LastName", SqlDbType.NVarChar).Value = lastName;
-                command.Parameters.Add("@Gender", SqlDbType.NVarChar).Value = gender;
-                command.Parameters.Add("@Department", SqlDbType.NVarChar).Value = department;
-                command.Parameters.Add("@Height", SqlDbType.Int).Value = height; // Changed to Int
-                command.Parameters.Add("@Major", SqlDbType.NVarChar).Value = major;
-                command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = email;
-                command.Parameters.Add("@Password", SqlDbType.NVarChar).Value = password;
 
-                connection.Open();
-                command.ExecuteNonQuery();
+                _sqlConnection.Open();
             }
+            var reader = command.ExecuteNonQuery();
+
         }
-
-        public void InsertEnrollment(int studentId, string term, string year)
+        public static void InsertEnrollment(int studentId, string term, string year)
         {
-            const string query = @"
-                INSERT INTO DBO.Enrollment ([StudentId], [Term], [Year])
-                VALUES (@StudentId, @Term, @Year)";
+            const string studentsInsertQuery = "INSERT INTO [dbo].[Enrollment] ([StudentId],[Term],[Year]) " +
+                "VALUES (@StudentId, @Term, @Year)";
+            var command = new SqlCommand(studentsInsertQuery, _sqlConnection);
+            command.Parameters.AddWithValue("@StudentId", studentId);
+            command.Parameters.AddWithValue("@Term", term);
+            command.Parameters.AddWithValue("@Year", year);
 
-            using (var connection = new SqlConnection(_connectionString))
-            using (var command = new SqlCommand(query, connection))
+            if (_sqlConnection.State != ConnectionState.Open)
             {
-                command.Parameters.Add("@StudentId", SqlDbType.Int).Value = studentId;
-                command.Parameters.Add("@Term", SqlDbType.NVarChar).Value = term;
-                command.Parameters.Add("@Year", SqlDbType.NVarChar).Value = year;
 
-                connection.Open();
-                command.ExecuteNonQuery();
+                _sqlConnection.Open();
             }
+            var reader = command.ExecuteNonQuery();
+
         }
-
-        public bool CheckEnrollment(int studentId)
+        public static bool CheckStudent(int studentId)
         {
-            const string query = "SELECT 1 FROM DBO.Enrollment WHERE StudentId = @StudentId";
-
-            using (var connection = new SqlConnection(_connectionString))
-            using (var command = new SqlCommand(query, connection))
+            var student = new Student();
+            const string getStudentQuery = "SELECT * FROM dbo.Enrollment Where StudentId = @StudentId";
+            //create sql command adn add parameters
+            var command = new SqlCommand(getStudentQuery, _sqlConnection);
+            command.Parameters.AddWithValue("@StudentId", studentId);
+            if (_sqlConnection.State != ConnectionState.Open)
             {
-                command.Parameters.Add("@StudentId", SqlDbType.Int).Value = studentId;
 
-                connection.Open();
-                using (var reader = command.ExecuteReader())
-                {
-                    return reader.Read();
-                }
+                _sqlConnection.Open();
             }
+            bool enrollementFound = false;
+            var reader = command.ExecuteReader();
+            while (reader.Read() && enrollementFound == false)
+            {
+                enrollementFound = true;
+            }
+            return enrollementFound;
         }
     }
 }
