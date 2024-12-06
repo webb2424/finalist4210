@@ -1,0 +1,120 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+.style43a {
+    font-family:'Franklin Gothic Medium';
+    font-size: xx-large;
+}
+
+p-style{
+    margin-top:.5ex;
+    font-weight: bold
+
+}
+
+s-style {
+    margin-left: .1ex;
+}
+
+s-style-ex {
+    margin-left: .2ex;
+}
+
+s-homescreen {
+    background-image: linear-gradient(to top, rgb(3, 3, 3), grey);
+    color: blue;
+    text-align: left;
+}
+
+s-homescreen-info {
+    margin-top: 1em;
+}
+
+s-homescreen-logout {
+    margin-top: 1em;
+    text-align: right;
+}
+
+.boxall {
+    display: flex;
+    background: #F5E8DF;
+    height: 132px;
+    width:100%;
+    border-bottom: 2px solid #fff;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #786450;
+    transition: all 0.4s ease-in-out;
+}
+
+new-user-modal{
+    display: none;
+
+}
+
+table, tr, td{
+    border: 1px solid;
+
+}
+
+th{
+    background-color: blue;
+    color: antiquewhite;
+
+}
+
+tr:nth-child(even) {background-color: aliceblue; }
+
+label {
+    font-family: 'Trebuchet MS', 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 18xp;
+    margin-bottom: 10xp;
+    margin-top: 10px;
+
+}
+
+.application-form{
+    margin-left:20px ;
+    margin-right: 60px ;
+    padding-bottom: 20px;
+}
+
+.application-form2{
+    text-align:left;
+    background-color:#786450;
+    
+}
+
+#submit {
+    background-color: purple;
+    color: white;
+    width: 90px;
+    height: 40px;
+    border:0px solid;
+
+}
+
+.address {
+    width: 300px;
+
+}

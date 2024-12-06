@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "Shapes - Application Form";
+}
+
+<div style="text-align: center;">
+    <img src="~/images/shapes_logo.png" alt="Shapes Logo" style="width: 200px; margin-bottom: 20px;" />
+</div>
+
+<div class="application-form">
+    <div class="application-form-content" style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+        <h3 style="text-align: center; color: #2C3E50;">Shapes Employment/Membership Application Form</h3>
+        <br />
+        <label for="firstName" style="font-weight: bold;">First Name</label><br />
+        <input id="firstName" type="text" class="form-control" placeholder="Enter your first name" style="width: 100%;" /><br />
+
+        <label for="lastName" style="font-weight: bold;">Last Name</label><br />
+        <input id="lastName" type="text" class="form-control" placeholder="Enter your last name" style="width: 100%;" /><br />
+
+        <label for="emailAddress" style="font-weight: bold;">Email Address</label><br />
+        <input id="emailAddress" type="email" class="form-control" placeholder="Enter your email" style="width: 100%;" /><br />
+
+        <label for="address1" style="font-weight: bold;">Address Line 1</label><br />
+        <input id="address1" type="text" class="form-control" placeholder="Street address" style="width: 100%;" /><br />
+
+        <label for="address2" style="font-weight: bold;">Address Line 2</label><br />
+        <input id="address2" type="text" class="form-control" placeholder="Apartment, suite, etc." style="width: 100%;" /><br />
+
+        <label for="city" style="font-weight: bold;">City</label><br />
+        <input id="city" type="text" class="form-control" placeholder="Enter your city" style="width: 100%;" /><br />
+
+        <label for="state" style="font-weight: bold;">State</label><br />
+        <select id="state" class="form-control" style="width: 100%;">
+            <option value="CA" selected="selected">California</option>
+            <option value="AZ">Arizona</option>
+            <option value="NV">Nevada</option>
+        </select><br />
+
+        <label for="phone" style="font-weight: bold;">Phone Number</label><br />
+        <input id="phone" type="tel" class="form-control" placeholder="(888)-888-8888" style="width: 100%;" /><br />
+
+        <label for="resume" style="font-weight: bold;">Upload Resume</label><br />
+        <input id="resume" type="file" class="form-control" style="width: 100%;" /><br />
+
+        <div style="text-align: center; margin-top: 20px;">
+            <input id="submit" type="submit" value="Submit Application" class="btn btn-primary" style="width: 200px;" />
+        </div>
+    </div>
+</div>

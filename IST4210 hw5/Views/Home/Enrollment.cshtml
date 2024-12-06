@@ -1,0 +1,43 @@
+﻿@model IEnumerable<IST4210_hw5.Models.Student>
+
+@{
+    ViewData["Title"] = "Shapes - Class Enrollment";
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>The table below shows enrollment for the current fitness classes this term:</p>
+
+<table style="width: 100%; border-collapse: collapse; text-align: left;">
+    <thead>
+        <tr>
+            <th style="border-bottom: 2px solid #ddd; padding: 8px;">First Name</th>
+            <th style="border-bottom: 2px solid #ddd; padding: 8px;">Last Name</th>
+            <th style="border-bottom: 2px solid #ddd; padding: 8px;">Class</th>
+            <th style="border-bottom: 2px solid #ddd; padding: 8px;">Enrollment Status</th>
+            <th style="border-bottom: 2px solid #ddd; padding: 8px;">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var student in Model)
+        {
+            @using (Html.BeginForm("Enrollment", "Home", FormMethod.Post))
+            {
+                @Html.Hidden("StudentId", @student.StudentId)
+                <tr>
+                    <td style="padding: 8px;">@student.FirstName</td>
+                    <td style="padding: 8px;">@student.LastName</td>
+                    <td style="padding: 8px;">@student.Department</td>
+                    <td style="padding: 8px; color: @(student.EnrollmentStatus.ToLower() == "enrolled" ? "green" : "red"); font-weight: bold;">
+                        @student.EnrollmentStatus
+                    </td>
+                    <td style="padding: 8px;">
+                        @if (student.EnrollmentStatus.ToLower() != "enrolled")
+                        {
+                            <input id=@student.StudentId type="submit" value="Enroll" class="btn btn-primary" />
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

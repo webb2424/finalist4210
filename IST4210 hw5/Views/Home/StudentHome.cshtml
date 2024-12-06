@@ -1,0 +1,127 @@
+﻿@{
+    ViewData["Title"] = "Shapes - Fitness Calendar and Profile";
+}
+
+<div id="shapes_home_main" class="shapes-homescreen">
+    <h1 class="shapes-style">Welcome to Shapes Fitness Group!</h1>
+</div>
+
+<!-- Calendar of Events -->
+<div class="shapes-calendar-section">
+    <h2>Upcoming Events</h2>
+    <table class="shapes-calendar">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Event</th>
+                <th>Location</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>December 5, 2024</td>
+                <td>Morning Yoga</td>
+                <td>Shapes Studio A</td>
+            </tr>
+            <tr>
+                <td>December 6, 2024</td>
+                <td>HIIT Class</td>
+                <td>Shapes Gym Hall</td>
+            </tr>
+            <tr>
+                <td>December 7, 2024</td>
+                <td>Spin Class</td>
+                <td>Shapes Cycle Room</td>
+            </tr>
+            <tr>
+                <td>December 8, 2024</td>
+                <td>Cardio Dance Party</td>
+                <td>Shapes Main Stage</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Profile Information -->
+<div class="shapes-profile">
+    <table>
+        <tr>
+            <td>
+                <img src="~/images/profile_image.png" alt="Profile Image" class="boxall" />
+
+                <div style="text-align: center">
+                    <a href="https://www.facebook.com"> <i class="fa fa-facebook"> </i> </a>
+                    <a href="https://www.twitter.com" class="shapes-style"> <i class="fa fa-twitter"> </i> </a>
+                    <a href="https://www.linkedin.com" class="shapes-style"> <i class="fa fa-linkedin"> </i> </a>
+                </div>
+            </td>
+            <td>
+                <div class="shapes-style">
+                    <p>@ViewBag.Name</p>
+                    <p>@ViewBag.occupation</p>
+                    <p>@ViewBag.university</p>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<!-- Logout Section -->
+<div id="shapes_home_logout" class="shapes-homescreen-logout">
+    <div id="logout">
+        <a id="logout_link" href="#">Log Out</a>
+    </div>
+</div>
+
+<!-- Internship History -->
+<div class="shapes-homescreen-info">
+    <h4>Internship History</h4>
+    <div>
+        <small>May 2015 - August 2015</small><br />
+        <i class="fa fa-address-card" style="color: firebrick"></i>
+        <span style="font-weight: bold; margin-left: 0.5em">Summer Intern - Google User Experience</span><br />
+        <i class="fa fa-building" style="color: firebrick"></i>
+        <span style="font-weight: bold; margin-left: 0.5em">Utopia - World</span>
+        <p>
+            <i class="fa fa-folder-open" style="color: blue"></i> Completed critical UX projects for mobile platforms.
+        </p>
+    </div>
+</div>
+
+<!-- Education History -->
+<div class="shapes-homescreen-info">
+    <h2 class="text-center">Education History</h2>
+    <div class="row container">
+        <div class="col-12 col-md-4 col-lg-4 col-xl-4 text-center">
+            <i class="fa fa-pagelines"></i>
+            <h3>High School</h3>
+            <p>St. Joseph's High School, Calabasas, California</p>
+        </div>
+        <div class="col-12 col-md-4 col-lg-4 col-xl-4 text-center">
+            <i class="fa fa-coffee"></i>
+            <h3>Associate's</h3>
+            <p>Santa Monica College, Santa Monica, CA</p>
+        </div>
+        <div class="col-12 col-md-4 col-lg-4 col-xl-4 text-center">
+            <i class="fa fa-pagelines"></i>
+            <h3>Bachelor's</h3>
+            <p>St. Joseph's University, Calabasas, California</p>
+        </div>
+    </div>
+</div>
+
+<!-- Activities Section -->
+<div class="shapes-homescreen-info">
+    <h2 class="text-center">Activities</h2>
+    <div style="text-align: center">
+        <table style="width: 80%; margin-left: 3em">
+            <tr>
+                <td><img style="width:100%" src="~/images/2.png" /></td>
+                <td><img style="width:100%" src="~/images/main.jpg" /></td>
+                <td><img style="width:100%" src="~/images/1.jpg" /></td>
+                <td><img style="width:100%" src="~/images/four.jpg" /></td>
+                <td><img style="width:100%" src="~/images/l.jpg" /></td>
+            </tr>
+        </table>
+    </div>
+</div>
